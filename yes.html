@@ -25,7 +25,7 @@ body {
   font-size: 28px;
   color: #ff4d88;
   z-index: 2;
-   text-shadow: 2px 2px 6px #fff, 0 0 4px #ffb3d9;
+  text-shadow: 2px 2px 6px #fff, 0 0 4px #ffb3d9;
 }
 
 /* ====== HEART STYLE ====== */
@@ -81,8 +81,15 @@ body {
 
 /* ONLY THE "SECURITY RISK DETECTED" LINE TRAFFIC-RED */
 #loveModal .warning {
-  color: #FF0000; /* bright traffic-light red */
+  color: #FF0000;
   font-weight: bold;
+}
+
+/* Fine print styling */
+#loveModal .fine-print {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 10px;
 }
 </style>
 </head>
@@ -102,7 +109,14 @@ body {
     • Become this person's Valentine<br>
     • Signed your life away to them for good<br>
     • Received a lifetime warranty of unconditional love and affection<br>
-    • Your minds imagination and your heart's desires <3<br><br>
+    • Your mind's imagination and your heart's desires &lt;3<br>
+
+    <!-- ✅ Fine print added here -->
+    <div class="fine-print">
+      Any attempt to opt out of this companionship will be deemed invalid and will result in an overwhelming amount of admiration, hugs, and kisses.
+    </div>
+
+    <br>
     <button id="closeModal">OK</button>
   </div>
 </div>
@@ -115,38 +129,31 @@ function createHeart(delay = 0) {
     heart.className = "heart";
     heart.innerHTML = "💖";
 
-    // Random horizontal position
     heart.style.left = Math.random() * 100 + "vw";
 
-    // Random fall duration
     const fallDuration = 1 + Math.random() * 3;
     heart.style.animationDuration = fallDuration + "s";
 
-    // Random size
     heart.style.fontSize = (22.5 + Math.random() * 25) + "px";
 
     document.body.appendChild(heart);
 
-    // Remove after fall completes
     setTimeout(() => heart.remove(), fallDuration * 1000 + 200);
   }, delay);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ====== INITIAL HEART FLOOD (LOWER, CLEAN) ====== */
   for (let i = 0; i < 35; i++) {
     createHeart(Math.random() * 400);
   }
 
-  /* ====== CONTINUOUS HEART RAIN ====== */
   setInterval(() => {
     for (let i = 0; i < 2; i++) {
       createHeart(Math.random() * 80);
     }
   }, 45);
 
-  /* ====== SHOW NON-BLOCKING MODAL ====== */
   const modal = document.getElementById('loveModal');
   const closeBtn = document.getElementById('closeModal');
 
@@ -157,6 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
   closeBtn.addEventListener('click', () => {
     modal.style.display = 'none';
   });
+});
+</script>
+
+</body>
+</html>
 });
 </script>
 
