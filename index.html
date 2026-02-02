@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: repeating-linear-gradient(
+    135deg,
+    #ffe6f0 0 40px,
+    #ffffff 40px 80px
+  );
+  z-index: -2;
+  animation: moveBG 5s linear infinite;
+}
+
+@keyframes moveBG {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(500px,500px); }
+}
+
+.card {
+  position: relative;
+  width: 360px;
+  padding: 30px;
+  border-radius: 22px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  z-index: 1;
+  overflow: hidden;
+  animation: popIn 1s ease-out;
+  background: transparent;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffffff 0 30px,
+    #fff0f6 30px 60px
+  );
+  z-index: -1;
+  animation: moveCard 2.5s linear infinite;
+}
+
+@keyframes moveCard {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(-300px,-300px); }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.2) rotate(-12deg); opacity:0; }
+  60% { transform: scale(1.1) rotate(3deg); opacity:1; }
+  100% { transform: scale(1) rotate(0); }
+}
+
+h1 {
+  color: #ff4d88;
+  font-size: 26px;
+  margin-bottom: 15px;
+}
+
+.heart-bump {
+  display: block;
+  font-size: 80px;
+  margin: 15px auto;
+  animation: bump 1s infinite;
+}
+
+@keyframes bump {
+  0%, 50%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  75% { transform: scale(1.15); }
+}
+
+.buttons {
+  position: relative;
+  height: 110px;
+  margin-top: 25px;
+}
+
+button {
+  padding: 10px 22px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  position: absolute;
+}
+
+#yes {
+  background-color: #ff4d88;
+  color: white;
+  left: 50px;
+  top: 35px;
+}
+
+#no {
+  background-color: #ffd1e1;
+  color: #ff4d88;
+  left: 200px;
+  top: 35px;
+}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>
+    Will you be my Valentine <br>
+Shauna baby 😘
+  </h1>
+
+  <span class="heart-bump">💖</span>
+
+  <div class="buttons">
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 💔</button>
+  </div>
+</div>
+
+<script>
+const noButton = document.getElementById("no");
+const container = document.querySelector(".buttons");
+
+// Current position relative to container
+let posX = noButton.offsetLeft;
+let posY = noButton.offsetTop;
+
+// Velocity (starts at 0)
+let velX = 0;
+let velY = 0;
+
+// Settings
+const evadeRadius = 100;  // distance to trigger dodge
+const evadeStrength = 6;   // speed multiplier
+const friction = 0.9;      // slows down movement
+
+document.addEventListener("mousemove", (e) => {
+  const rect = noButton.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  // Cursor relative to container
+  const mouseX = e.clientX - containerRect.left;
+  const mouseY = e.clientY - containerRect.top;
+
+  const centerX = posX + rect.width / 2;
+  const centerY = posY + rect.height / 2;
+
+  const dx = mouseX - centerX;
+  const dy = mouseY - centerY;
+  const distance = Math.sqrt(dx*dx + dy*dy);
+
+  if(distance < evadeRadius) {
+    const angle = Math.atan2(dy, dx);
+    velX -= Math.cos(angle) * evadeStrength;
+    velY -= Math.sin(angle) * evadeStrength;
+  }
+});
+
+function update() {
+  const rect = noButton.getBoundingClientRect();
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+
+  // Move the button
+  posX += velX;
+  posY += velY;
+
+  // Keep inside container
+  if(posX < 0){ posX = 0; velX *= -1; }
+  if(posX > containerWidth - rect.width){ posX = containerWidth - rect.width; velX *= -1; }
+  if(posY < 0){ posY = 0; velY *= -1; }
+  if(posY > containerHeight - rect.height){ posY = containerHeight - rect.height; velY *= -1; }
+
+  // Apply friction
+  velX *= friction;
+  velY *= friction;
+
+  // Update position
+  noButton.style.left = posX + "px";
+  noButton.style.top = posY + "px";
+
+  requestAnimationFrame(update);
+}
+
+update();
+
+// Yes button click
+document.getElementById("yes").addEventListener("click", () => {
+  window.location.href = "yes.html";
+});
+</script>
+</body>
+</html>
